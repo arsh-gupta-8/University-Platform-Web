@@ -4,16 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Connect U - Connect, Collaborate, Research</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <header>
-        <div class="logo">Connect U</div>
+        <a href="{{ url_for('home') }}" class="logo"><div class="logo">Connect U</div></a>
         <nav>
-            <a href="account.html">Sign Up/In</a>
-            <a href="about.html">About</a>
-            <a href="contact.html">Contact</a>
+            <a href="{{ url_for('home') }}">Sign Up/In</a>
+            <a href="{{ url_for('home') }}">About</a>
+            <a href="{{ url_for('home') }}">Contact</a>
         </nav>
     </header>
 
@@ -22,7 +22,7 @@
             <h1><span id="hero-exaggerate">Connect</span> with <span id="hero-exaggerate">U</span>niversity students</h1>
             <p class="subtitle">The Thai platform for collaborating, befriending and meeting other university students.</p>
             <div class="cta-group">
-                <a href="/signup" class="cta-primary">Find People</a>
+                <a href="{{ url_for('posts') }}" class="cta-primary">Find People</a>
             </div>
         </div>
     </main>

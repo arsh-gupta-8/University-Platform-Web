@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find Groups - Connect U</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <a href="{{ url_for('home') }}"><div class="logo">Connect U</div></a>
+        <nav>
+            <a href="#profile">Profile</a>
+            <a href="#groups">Groups</a>
+            <a href="#notifications">Notifications</a>
+        </nav>
+    </header>
+
+    <div class="page-wrapper">
+
+        <aside class="sidebar">
+
+            <div class="sidebar-section">
+
+                <div class="sidebar-nav">
+                    <h3>Discover</h3>
+                    <a href="#">Recommended</a>
+                    <a href="#">Research Posts</a>
+                    <a href="#">Find Friends</a>
+                    <a href="#">Study Groups</a>
+                    <a href="#">Sports Events</a>
+                </div>
+
+                <!-- Subject/Filter Checkboxes -->
+                <div class="sidebar-filters">
+                    <h3>Filter by Subject</h3>
+                    <div class="filter-item">
+                        <input type="checkbox" id="filter-english" name="subject" value="english">
+                        <label for="filter-english">English Literature</label>
+                    </div>
+                    <div class="filter-item">
+                        <input type="checkbox" id="filter-physics" name="subject" value="physics" checked>
+                        <label for="filter-physics">Physics</label>
+                    </div>
+                    <div class="filter-item">
+                        <input type="checkbox" id="filter-chemistry" name="subject" value="chemistry">
+                        <label for="filter-chemistry">Chemistry</label>
+                    </div>
+                    <div class="filter-item">
+                        <input type="checkbox" id="filter-biology" name="subject" value="biology">
+                        <label for="filter-biology">Biology</label>
+                    </div>
+                    <div class="filter-item">
+                        <input type="checkbox" id="filter-math" name="subject" value="math">
+                        <label for="filter-math">Mathematics (Calc)</label>
+                    </div>
+                </div>
+                
+                <!-- Call to Action -->
+                <h3>Ready to Share?</h3>
+                <a href="/create-post" class="cta-primary" style="display: block; text-align: center; padding: 10px 20px; font-size: 1rem;">
+                    Create New Post
+                </a>
+
+            </div>
+
+        </aside>
+
+        <!-- RIGHT COLUMN: MAIN CONTENT (POSTS) -->
+        <main class="main-content">
+            <!-- Mock Post 1: Research -->
+            <article class="post-card" onclick="window.location.href='/post/2131'">
+                <div class="post-header">
+                    <h4>
+                        <span class="tag">RESEARCH</span> Bio-inspired Robotics for Water Sample Collection
+                    </h4>
+                    <div class="post-meta">
+                        <i class="fas fa-user"></i> Posted by Alex T. in Physics | 
+                        <i class="fas fa-calendar-alt"></i> 5 hours ago
+                    </div>
+                </div>
+                <div class="post-body">
+                    <p>
+                        We are looking for a collaborator with strong expertise in fluid dynamics simulation (CFD) to analyze the propulsion efficiency of our robotic fish prototype. This is a final year project that has secured initial funding.
+                    </p>
+                </div>
+                <div class="post-actions">
+                    <button><i class="far fa-heart"></i> 45 Likes</button>
+                    <button><i class="far fa-comment"></i> 12 Comments</button>
+                    <button><i class="fas fa-share-alt"></i> Share</button>
+                </div>
+            </article>
+
+            <!-- Mock Post 2: Study Group -->
+            <article class="post-card" onclick="window.location.href='/post/2132'">
+                <div class="post-header">
+                    <h4>
+                        <span class="tag" style="background-color: #f7a54a;">STUDY</span> Calculus II Cram Session (Differential Equations)
+                    </h4>
+                    <div class="post-meta">
+                        <i class="fas fa-user"></i> Posted by Jane D. in Mathematics | 
+                        <i class="fas fa-calendar-alt"></i> Yesterday
+                    </div>
+                </div>
+                <div class="post-body">
+                    <p>
+                        Need motivated students for a rigorous study session covering chapters 4-6 this weekend. We will meet at the Central Library, room C-301. Bring your notes and caffeine! All levels welcome.
+                    </p>
+                </div>
+                <div class="post-actions">
+                    <button><i class="far fa-heart"></i> 7 Likes</button>
+                    <button><i class="far fa-comment"></i> 4 Comments</button>
+                    <button><i class="fas fa-share-alt"></i> Share</button>
+                </div>
+            </article>
+
+            <!-- Mock Post 3: Social -->
+            <article class="post-card" onclick="window.location.href='/post/2133'">
+                <div class="post-header">
+                    <h4>
+                        <span class="tag" style="background-color: #6c757d;">SOCIAL</span> Casual 5v5 Basketball Game at the Gym Tonight?
+                    </h4>
+                    <div class="post-meta">
+                        <i class="fas fa-user"></i> Posted by Ben K. in Sports | 
+                        <i class="fas fa-calendar-alt"></i> 2 hours ago
+                    </div>
+                </div>
+                <div class="post-body">
+                    <p>
+                        Does anyone want to run a few pickup games? We have 6 people already, just need a few more for a proper run. Starting around 7:30 PM. Reply to confirm and I'll create a quick group chat.
+                    </p>
+                </div>
+                <div class="post-actions">
+                    <button><i class="far fa-heart"></i> 18 Likes</button>
+                    <button><i class="far fa-comment"></i> 7 Comments</button>
+                    <button><i class="fas fa-share-alt"></i> Share</button>
+                </div>
+            </article>
+
+            <article class="post-card" onclick="window.location.href='/post/2133'">
+                <div class="post-header">
+                    <h4>
+                        <span class="tag" style="background-color: #6c757d;">SOCIAL</span> Casual 5v5 Basketball Game at the Gym Tonight?
+                    </h4>
+                    <div class="post-meta">
+                        <i class="fas fa-user"></i> Posted by Ben K. in Sports | 
+                        <i class="fas fa-calendar-alt"></i> 2 hours ago
+                    </div>
+                </div>
+                <div class="post-body">
+                    <p>
+                        Does anyone want to run a few pickup games? We have 6 people already, just need a few more for a proper run. Starting around 7:30 PM. Reply to confirm and I'll create a quick group chat.
+                    </p>
+                </div>
+                <div class="post-actions">
+                    <button><i class="far fa-heart"></i> 18 Likes</button>
+                    <button><i class="far fa-comment"></i> 7 Comments</button>
+                    <button><i class="fas fa-share-alt"></i> Share</button>
+                </div>
+            </article>
+
+            <article class="post-card" onclick="window.location.href='/post/2133'">
+                <div class="post-header">
+                    <h4>
+                        <span class="tag" style="background-color: #6c757d;">SOCIAL</span> Casual 5v5 Basketball Game at the Gym Tonight?
+                    </h4>
+                    <div class="post-meta">
+                        <i class="fas fa-user"></i> Posted by Ben K. in Sports | 
+                        <i class="fas fa-calendar-alt"></i> 2 hours ago
+                    </div>
+                </div>
+                <div class="post-body">
+                    <p>
+                        Does anyone want to run a few pickup games? We have 6 people already, just need a few more for a proper run. Starting around 7:30 PM. Reply to confirm and I'll create a quick group chat.
+                    </p>
+                </div>
+                <div class="post-actions">
+                    <button><i class="far fa-heart"></i> 18 Likes</button>
+                    <button><i class="far fa-comment"></i> 7 Comments</button>
+                    <button><i class="fas fa-share-alt"></i> Share</button>
+                </div>
+            </article>
+
+        </main>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Connect U. Built for students.</p>
+    </footer>
+</body>
+</html>
