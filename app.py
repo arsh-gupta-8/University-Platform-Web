@@ -1,12 +1,15 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, url_for, request, redirect, session
 import os
 from dotenv import load_dotenv
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
-
-app = Flask("__main__")
+import uuid
 
 load_dotenv()
+
+app = Flask("__main__")
+FLASK_KEY = os.getenv("FLASK_KEY") 
+app.secret_key = FLASK_KEY
 
 DB_URI = os.getenv("DB_URI") 
 if not DB_URI:
@@ -39,6 +42,10 @@ def posts():
 def accounts():
     return render_template('accounts.html')
 
+@app.route('/login')
+def login():
+    return render_template('login.html')
+
 @app.route('/register', methods=['POST'])
 def register():
     username = request.form.get('username')
@@ -61,6 +68,30 @@ def register():
     except Exception as e:
         print(f"Database operation failed: {e}")
         return render_template('posts.html')
+
+
+@app.route('/enteraccount', methods=['POST'])
+def enteraccount():
+    username = request.form.get('username')
+    password = request.form.get('password')
+
+    if not user_collection:
+        return redirect(url_for('accounts'))
+    
+    if not username or not password:
+        return redirect(url_for('accounts'))
+        
+    try:
+        user = user_collection.find_one({"username": username})
+        if user and user.get('password') == password:
+            session['username'] = username
+            return redirect(url_for('home'))
+        else:
+            return redirect(url_for('accounts'))    
+
+    except Exception as e:
+        print(f"Login database error: {e}")
+        return redirect(url_for('accounts'))
 
 if __name__ == '__main__':
     app.run(debug=True)
