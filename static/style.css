@@ -12,6 +12,11 @@
     --text-light: #FFFFFF;
     --card-bg: #FFFFFF;
     --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --research: #5B8BEB;
+    --study: #f7a54a;
+    --work: #33bd58;
+    --social: #e036be;
+    --other: #6c757d;
 }
 
 body {
@@ -301,11 +306,16 @@ nav a:hover {
     font-weight: 600;
     padding: 4px 8px;
     border-radius: 4px;
-    background-color: var(--primary-color);
     color: var(--text-light);
     margin-right: 10px;
     vertical-align: middle;
 }
+
+.research { background-color: var(--research); }
+.study    { background-color: var(--study); }
+.social   { background-color: var(--social); }
+.work     { background-color: var(--work); }
+.other    { background-color: var(--other); }
 
 .post-meta {
     font-size: 0.9rem;

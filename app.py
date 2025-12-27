@@ -6,6 +6,7 @@ from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 import uuid
 
+os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 load_dotenv()
 
 app = Flask("__main__")
@@ -17,7 +18,7 @@ if not DB_URI:
     print("Database environment not set")
 
 try:
-    client = MongoClient(os.getenv("DB_URI"), server_api=ServerApi('1'))
+    client = MongoClient(os.getenv("DB_URI"), server_api=ServerApi('1'), serverSelectionTimeoutMS=5000)
     client.admin.command('ping')
     print("Pinged your deployment. You successfully connected!")
 except Exception as e:
@@ -38,21 +39,21 @@ CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
 CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET") 
 
 oauth = OAuth(app)
+oauth = OAuth(app)
 google = oauth.register(
     name='google',
     client_id=CLIENT_ID,
     client_secret=CLIENT_SECRET,
-    access_token_url='https://accounts.google.com/o/oauth2/token',
-    access_token_params=None,
     authorize_url='https://accounts.google.com/o/oauth2/auth',
-    authorize_params=None,
+    access_token_url='https://accounts.google.com/o/oauth2/token',
     api_base_url='https://www.googleapis.com/oauth2/v1/',
     userinfo_endpoint='https://openidconnect.googleapis.com/v1/userinfo',
-    client_kwargs={'scope': 'openid email profile'},
-    server_metadata_url='https://accounts.google.com/.well-known/openid-configuration'
+    jwks_uri='https://www.googleapis.com/oauth2/v3/certs',
+    client_kwargs={
+        'scope': 'openid email profile',
+        'issuer': 'https://accounts.google.com'
+    }
 )
-
-
 
 @app.route('/')
 def home():
@@ -60,8 +61,12 @@ def home():
 
 @app.route('/posts')
 def posts():
-    all_posts = db.posts.find().sort("_id", -1)
+    all_posts = post_storage.find().sort("_id", -1)
     return render_template('posts.html', posts=all_posts)
+
+@app.route('/account')
+def account():
+    return render_template('accounts.html')
 
 
 
@@ -78,7 +83,7 @@ def storePost():
     title = request.form.get('title')
     description = request.form.get('description')
 
-    if not post_storage:
+    if post_storage is None:
         return redirect(url_for('create-post'))
 
     if not tag or not privacy or not title or not description:
@@ -86,7 +91,7 @@ def storePost():
     
     try:
         post_storage.insert_one({
-            "creator": session["username"],
+            "creator": session.get('username'),
             "title" : title,
             "tag": tag,
             "privacy": privacy,
@@ -95,11 +100,11 @@ def storePost():
             "comments": 0
         })
 
-        return render_template('posts.html')
+        return redirect(url_for('posts'))
 
     except Exception as e:
         print(f"Database operation failed: {e}")
-        return render_template('posts.html')
+        return redirect(url_for('posts'))
 
 
 
@@ -114,40 +119,53 @@ def login():
 @app.route('/auth/callback')
 def auth_callback():
     token = google.authorize_access_token()
-    user_info = google.get('userinfo').json()
+    user_info = google.userinfo()
     session['useremail'] = user_info.get('email')
     session['userprofile'] = user_info.get('picture')
-    session['usergivenname'] = user_info.get('given_name')
 
     if user_collection is None:
         return redirect(url_for('home'))
 
     user = user_collection.find_one({"email": session['useremail']})
     if user:
-        if user.get('picture') != session['userprofile']:
-            updatedprofile = { "$set": {"userprofile" : session['userprofile']}}
-            update_result = user_collection.update_one( {"email": session['useremail']} , updatedprofile)
+        session['usergivenname'] = user.get('given_name')
+        session['username'] = user.get('username')
+        if user.get('picture') != session.get('userprofile'):
+            updatedprofile = { "$set": {"userprofile" : session.get('userprofile')}}
+            update_result = user_collection.update_one( {"email": session.get('useremail')} , updatedprofile)
+        session['userID'] = user.get("user_id")
         return redirect(url_for('home'))
 
-    else:
-        try:
-            uniqueID = str(uuid.uuid4())
-            user_collection.insert_one({
-                "user_id": uniqueID,
-                "email": session['useremail'],
-                "userprofile": session['userprofile'],
-                "usergivenname": session['usergivenname']
-            })
+    return redirect(url_for('account_setup'))
 
-            return render_template('posts.html')
+@app.route('/account_setup')
+def account_setup():
+    return render_template('account_setup.html')
 
-        except Exception as e:
-            print(f"Database operation failed: {e}")
-            return render_template('posts.html')
+@app.route('/account_confirmation', methods=['POST'])
+def account_confirmation():
+    try:
+        uniqueID = str(uuid.uuid4())
+        user_collection.insert_one({
+            "user_id": uniqueID,
+            "email": session.get('useremail'),
+            "picture": session.get('userprofile'),
+            "given_name": request.form.get('givenname'),
+            "username": request.form.get('name')
+        })
+
+        return redirect(url_for('posts'))
+
+    except Exception as e:
+        print(f"Database operation failed: {e}")
+        return redirect(url_for('posts'))
 
 @app.route('/logout')
 def logout():
-    session.pop('user', None)
+    session.pop('username', None)
+    session.pop('useremail', None)
+    session.pop('usergivenname', None)
+    session.pop('userprofile', None)
     return redirect('/')
 
 # @app.route('/register', methods=['POST'])
@@ -197,13 +215,9 @@ def logout():
 #         print(f"Login database error: {e}")
 #         return redirect(url_for('accounts'))
 
-# @app.route('/accounts')
-# def accounts():
-#     return render_template('accounts.html')
-
 
 
 # RUN
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='127.0.0.1', port=5000, debug=True)

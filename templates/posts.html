@@ -11,7 +11,11 @@
     <header>
         <a href="{{ url_for('home') }}"><div class="logo">Connect U</div></a>
         <nav>
-            <a href="#profile">Profile</a>
+            {% if session.get('usergivenname') %}
+            <a href="{{ url_for('logout') }}">Hey, {{ session['usergivenname'] }}</a>
+            {% else %}
+            <a href="{{ url_for('login') }}">Login/Sign Up</a>
+            {% endif %}
             <a href="#groups">Groups</a>
             <a href="#notifications">Notifications</a>
         </nav>
@@ -32,7 +36,6 @@
                     <a href="#">Sports Events</a>
                 </div>
 
-                <!-- Subject/Filter Checkboxes -->
                 <div class="sidebar-filters">
                     <h3>Filter by Subject</h3>
                     <div class="filter-item">
@@ -57,9 +60,8 @@
                     </div>
                 </div>
                 
-                <!-- Call to Action -->
                 <h3>Ready to Share?</h3>
-                <a href="/create-post" class="cta-primary" style="display: block; text-align: center; padding: 10px 20px; font-size: 1rem;">
+                <a href="{{ url_for('create') }}" class="cta-primary" style="display: block; text-align: center; padding: 10px 20px; font-size: 1rem;">
                     Create New Post
                 </a>
 
@@ -67,121 +69,34 @@
 
         </aside>
 
-        <!-- RIGHT COLUMN: MAIN CONTENT (POSTS) -->
         <main class="main-content">
-            <!-- Mock Post 1: Research -->
-            <article class="post-card" onclick="window.location.href='/post/2131'">
+
+
+            {% for post in posts %}
+            <article class="post-card" onclick="window.location.href='/post/{{ post._id }}'">
                 <div class="post-header">
                     <h4>
-                        <span class="tag">RESEARCH</span> Bio-inspired Robotics for Water Sample Collection
+                        <span class="{{ post.tag }} tag">
+                            {{ post.tag | upper }}
+                        </span> {{ post.title }}
                     </h4>
                     <div class="post-meta">
-                        <i class="fas fa-user"></i> Posted by Alex T. in Physics | 
-                        <i class="fas fa-calendar-alt"></i> 5 hours ago
+                        <i class="fas fa-user"></i> Posted by {{ post.creator }} | 
+                        <i class="fas fa-calendar-alt"></i> Recently
                     </div>
                 </div>
                 <div class="post-body">
                     <p>
-                        We are looking for a collaborator with strong expertise in fluid dynamics simulation (CFD) to analyze the propulsion efficiency of our robotic fish prototype. This is a final year project that has secured initial funding.
-                    </p>
+                        {{ post.description }}
                 </div>
                 <div class="post-actions">
-                    <button><i class="far fa-heart"></i> 45 Likes</button>
-                    <button><i class="far fa-comment"></i> 12 Comments</button>
+                    <button><i class="far fa-heart"></i> {{ post.likes }} Likes</button>
+                    <button><i class="far fa-comment"></i> {{ post.comments }} Comments</button>
                     <button><i class="fas fa-share-alt"></i> Share</button>
                 </div>
             </article>
-
-            <!-- Mock Post 2: Study Group -->
-            <article class="post-card" onclick="window.location.href='/post/2132'">
-                <div class="post-header">
-                    <h4>
-                        <span class="tag" style="background-color: #f7a54a;">STUDY</span> Calculus II Cram Session (Differential Equations)
-                    </h4>
-                    <div class="post-meta">
-                        <i class="fas fa-user"></i> Posted by Jane D. in Mathematics | 
-                        <i class="fas fa-calendar-alt"></i> Yesterday
-                    </div>
-                </div>
-                <div class="post-body">
-                    <p>
-                        Need motivated students for a rigorous study session covering chapters 4-6 this weekend. We will meet at the Central Library, room C-301. Bring your notes and caffeine! All levels welcome.
-                    </p>
-                </div>
-                <div class="post-actions">
-                    <button><i class="far fa-heart"></i> 7 Likes</button>
-                    <button><i class="far fa-comment"></i> 4 Comments</button>
-                    <button><i class="fas fa-share-alt"></i> Share</button>
-                </div>
-            </article>
-
-            <!-- Mock Post 3: Social -->
-            <article class="post-card" onclick="window.location.href='/post/2133'">
-                <div class="post-header">
-                    <h4>
-                        <span class="tag" style="background-color: #6c757d;">SOCIAL</span> Casual 5v5 Basketball Game at the Gym Tonight?
-                    </h4>
-                    <div class="post-meta">
-                        <i class="fas fa-user"></i> Posted by Ben K. in Sports | 
-                        <i class="fas fa-calendar-alt"></i> 2 hours ago
-                    </div>
-                </div>
-                <div class="post-body">
-                    <p>
-                        Does anyone want to run a few pickup games? We have 6 people already, just need a few more for a proper run. Starting around 7:30 PM. Reply to confirm and I'll create a quick group chat.
-                    </p>
-                </div>
-                <div class="post-actions">
-                    <button><i class="far fa-heart"></i> 18 Likes</button>
-                    <button><i class="far fa-comment"></i> 7 Comments</button>
-                    <button><i class="fas fa-share-alt"></i> Share</button>
-                </div>
-            </article>
-
-            <article class="post-card" onclick="window.location.href='/post/2133'">
-                <div class="post-header">
-                    <h4>
-                        <span class="tag" style="background-color: #6c757d;">SOCIAL</span> Casual 5v5 Basketball Game at the Gym Tonight?
-                    </h4>
-                    <div class="post-meta">
-                        <i class="fas fa-user"></i> Posted by Ben K. in Sports | 
-                        <i class="fas fa-calendar-alt"></i> 2 hours ago
-                    </div>
-                </div>
-                <div class="post-body">
-                    <p>
-                        Does anyone want to run a few pickup games? We have 6 people already, just need a few more for a proper run. Starting around 7:30 PM. Reply to confirm and I'll create a quick group chat.
-                    </p>
-                </div>
-                <div class="post-actions">
-                    <button><i class="far fa-heart"></i> 18 Likes</button>
-                    <button><i class="far fa-comment"></i> 7 Comments</button>
-                    <button><i class="fas fa-share-alt"></i> Share</button>
-                </div>
-            </article>
-
-            <article class="post-card" onclick="window.location.href='/post/2133'">
-                <div class="post-header">
-                    <h4>
-                        <span class="tag" style="background-color: #6c757d;">SOCIAL</span> Casual 5v5 Basketball Game at the Gym Tonight?
-                    </h4>
-                    <div class="post-meta">
-                        <i class="fas fa-user"></i> Posted by Ben K. in Sports | 
-                        <i class="fas fa-calendar-alt"></i> 2 hours ago
-                    </div>
-                </div>
-                <div class="post-body">
-                    <p>
-                        Does anyone want to run a few pickup games? We have 6 people already, just need a few more for a proper run. Starting around 7:30 PM. Reply to confirm and I'll create a quick group chat.
-                    </p>
-                </div>
-                <div class="post-actions">
-                    <button><i class="far fa-heart"></i> 18 Likes</button>
-                    <button><i class="far fa-comment"></i> 7 Comments</button>
-                    <button><i class="fas fa-share-alt"></i> Share</button>
-                </div>
-            </article>
-
+            {% endfor %}
+            
         </main>
     </div>
 
