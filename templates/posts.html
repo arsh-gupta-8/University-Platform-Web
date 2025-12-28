@@ -1,11 +1,48 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="{{ session.get('theme', 'light') }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Find Groups - Connect U</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #5B8BEB;
+            --secondary-color: #333333;
+            --background-light: #F4F7FB;
+            --text-light: #FFFFFF;
+            --card-bg: #FFFFFF;
+            }
+
+        [data-theme="dark"] {
+            --primary-color: #5B8BEB;
+            --secondary-color: #F4F7FB;
+            --background-light: #252525;
+            --text-light: #3e3e3e;
+            --card-bg: #3e3e3e;
+            }
+
+
+        body {
+            background-color: var(--background-light);
+            color: var(--secondary-color);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .post-card, .create-post-container, .sidebar-section {
+            background-color: var(--card-bg);
+            color: var(--secondary-color);
+            /* Update borders so they aren't too bright in dark mode */
+            border: 1px solid rgba(0,0,0,0.1); 
+        }
+
+        /* Ensure headings and links update color */
+        h3, h4, .sidebar-nav a {
+            color: var(--secondary-color);
+        }
+    </style>
+
 </head>
 <body>
     <header>
@@ -96,7 +133,7 @@
                 </div>
             </article>
             {% endfor %}
-            
+
         </main>
     </div>
 
