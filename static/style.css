@@ -10,6 +10,7 @@
     --secondary-color: #333333;
     --background-light: #F4F7FB;
     --text-light: #FFFFFF;
+    --secondary-text: #666;
     --card-bg: #FFFFFF;
     --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.08);
     --research: #5B8BEB;
@@ -18,6 +19,18 @@
     --social: #e036be;
     --other: #6c757d;
 }
+
+@media (prefers-color-scheme: dark){
+    :root {
+        --primary-color: #5B8BEB;
+        --secondary-color: #F4F7FB;
+        --background-light: #252525;
+        --text-light: #3e3e3e;
+        --secondary-text: #cdcdcd;
+        --card-bg: #3e3e3e;
+        --shadow-light: 0 4px 12px rgba(216, 216, 216, 0.08);
+    }
+} 
 
 body {
     font-family: 'Poppins', sans-serif;
@@ -84,7 +97,7 @@ nav a:hover {
     font-weight: 400;
     margin-bottom: 40px;
     max-width: 600px;
-    color: #666;
+    color: var(--secondary-text);
     margin-left: auto;
     margin-right: auto;
 }
@@ -135,7 +148,7 @@ nav a:hover {
 .features-section {
     padding: 80px 5%;
     text-align: center;
-    background-color: var(--text-light);
+    background-color: var(--background-light);
 }
 
 .features-section h2 {
@@ -174,11 +187,14 @@ nav a:hover {
 }
 
 .feature-card p {
-    color: #555;
+    color: var(--secondary-text);
 }
 
 .page-wrapper {
     display: grid;
+    align-items: start;
+    width: 100%;
+    max-width: 100%;
     grid-template-columns: 280px 1fr;
     gap: 30px;
     padding: 30px 5%;
@@ -276,7 +292,7 @@ nav a:hover {
     padding: 25px;
     border-radius: 12px;
     box-shadow: var(--shadow-light);
-    border: 1px solid #eee;
+    border: 1px solid var(--background-light);
     transition: border-color 0.2s, transform 0.2s;
     cursor: pointer;
 }
@@ -288,7 +304,6 @@ nav a:hover {
 }
 
 .post-header {
-    margin-bottom: 15px;
     border-bottom: 1px dashed var(--background-light);
     padding-bottom: 15px;
 }
@@ -319,7 +334,7 @@ nav a:hover {
 
 .post-meta {
     font-size: 0.9rem;
-    color: #888;
+    color: var(--secondary-color);
 }
 
 .post-meta i {
@@ -328,7 +343,7 @@ nav a:hover {
 
 .post-body p {
     margin-bottom: 15px;
-    color: #555;
+    color: var(--secondary-color);
 }
 
 .post-actions {
@@ -340,8 +355,8 @@ nav a:hover {
 .post-actions button {
     background: none;
     border: none;
-    color: #888;
-    cursor: pointer;
+    color: var(--secondary-text);
+    cursor: pointertext;
     font-size: 0.9rem;
     transition: color 0.2s;
 }

@@ -114,7 +114,6 @@ def storePost():
 def login():
     redirect_uri = url_for('auth_callback', _external=True)
     return google.authorize_redirect(redirect_uri)
-    # return render_template('login.html')
 
 @app.route('/auth/callback')
 def auth_callback():
@@ -131,10 +130,12 @@ def auth_callback():
     if user:
         session['usergivenname'] = user.get('given_name')
         session['username'] = user.get('username')
+        session['userID'] = user.get("user_id")
+
         if user.get('picture') != session.get('userprofile'):
             updatedprofile = { "$set": {"userprofile" : session.get('userprofile')}}
             update_result = user_collection.update_one( {"email": session.get('useremail')} , updatedprofile)
-        session['userID'] = user.get("user_id")
+        
         return redirect(url_for('home'))
 
     return redirect(url_for('account_setup'))
@@ -145,14 +146,15 @@ def account_setup():
 
 @app.route('/account_confirmation', methods=['POST'])
 def account_confirmation():
+    session['usergivenname'] = request.form.get('givenname')
+    session['username'] = request.form.get('name')
     try:
         user_collection.insert_one({
             "user_id": session.get('userID'),
             "email": session.get('useremail'),
             "picture": session.get('userprofile'),
-            "given_name": request.form.get('givenname'),
-            "username": request.form.get('name'),
-            "theme": session.get('theme')
+            "given_name": session.get('usergivenname'),
+            "username": session.get('username'),
         })
 
         return redirect(url_for('posts'))
@@ -168,16 +170,6 @@ def logout():
     session.pop('usergivenname', None)
     session.pop('userprofile', None)
     return redirect('/')
-
-
-
-# THEME TOGGLE
-
-@app.route('/toggle-theme', methods=['POST'])
-def toggle_theme():
-    new_theme = request.json.get('theme')
-    session['theme'] = new_theme
-    return jsonify({"success": True})
 
 
 

@@ -105,38 +105,7 @@
             margin-top: 20px;
             cursor: pointer;
         }
-
-        :root {
-            --primary-color: #5B8BEB;
-            --secondary-color: #333333;
-            --background-light: #F4F7FB;
-            --text-light: #FFFFFF;
-            --card-bg: #FFFFFF;
-            }
-
-        [data-theme="dark"] {
-            --primary-color: #5B8BEB;
-            --secondary-color: #F4F7FB;
-            --background-light: #252525;
-            --text-light: #3e3e3e;
-            --card-bg: #3e3e3e;
-            }
     </style>    
-    <script>
-        function setTheme(newTheme) {
-            const htmlElement = document.documentElement;
-            htmlElement.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-
-            fetch('/toggle-theme', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ theme: newTheme })
-            })
-        }
-    </script>
 </head>
 <body>
     <header>
@@ -152,19 +121,6 @@
                 <input type="text" name="name" class="full-input" placeholder="Username">
                 <input type="text" name="email" class="full-input" value="{{ session.get('useremail', '') }}" readonly>
                 
-            </div>
-
-            <div class="post-section">
-                <h3>Appearance</h3>
-                <div class="button-group">
-                    <input type="radio" id="light-radio" name="theme_selection" value="light" 
-                        onclick="setTheme('light')" {% if session.get('theme') != 'dark' %}checked{% endif %}>
-                    <label for="light-radio" class="standard-btn">☀️ Light</label>
-
-                    <input type="radio" id="dark-radio" name="theme_selection" value="dark" 
-                        onclick="setTheme('dark')" {% if session.get('theme') == 'dark' %}checked{% endif %}>
-                    <label for="dark-radio" class="standard-btn">🌙 Dark</label>
-                </div>
             </div>
 
             <button type="submit" class="cta-primary submit-post">Save</button>

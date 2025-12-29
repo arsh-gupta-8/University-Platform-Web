@@ -6,43 +6,6 @@
     <title>Find Groups - Connect U</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary-color: #5B8BEB;
-            --secondary-color: #333333;
-            --background-light: #F4F7FB;
-            --text-light: #FFFFFF;
-            --card-bg: #FFFFFF;
-            }
-
-        [data-theme="dark"] {
-            --primary-color: #5B8BEB;
-            --secondary-color: #F4F7FB;
-            --background-light: #252525;
-            --text-light: #3e3e3e;
-            --card-bg: #3e3e3e;
-            }
-
-
-        body {
-            background-color: var(--background-light);
-            color: var(--secondary-color);
-            transition: background-color 0.3s, color 0.3s;
-        }
-
-        .post-card, .create-post-container, .sidebar-section {
-            background-color: var(--card-bg);
-            color: var(--secondary-color);
-            /* Update borders so they aren't too bright in dark mode */
-            border: 1px solid rgba(0,0,0,0.1); 
-        }
-
-        /* Ensure headings and links update color */
-        h3, h4, .sidebar-nav a {
-            color: var(--secondary-color);
-        }
-    </style>
-
 </head>
 <body>
     <header>
@@ -67,33 +30,32 @@
                 <div class="sidebar-nav">
                     <h3>Discover</h3>
                     <a href="#">Recommended</a>
-                    <a href="#">Research Posts</a>
-                    <a href="#">Find Friends</a>
-                    <a href="#">Study Groups</a>
-                    <a href="#">Sports Events</a>
+                    <a href="#">Trending</a>
+                    <a href="#">Most Liked</a>
+                    <a href="#">Latest</a>
                 </div>
 
                 <div class="sidebar-filters">
-                    <h3>Filter by Subject</h3>
+                    <h3>Filter by Tags</h3>
                     <div class="filter-item">
-                        <input type="checkbox" id="filter-english" name="subject" value="english">
-                        <label for="filter-english">English Literature</label>
+                        <input type="checkbox" class="tag-filter" id="filter-research" name="subject" value="research" checked>
+                        <label for="filter-research">Research</label>
                     </div>
                     <div class="filter-item">
-                        <input type="checkbox" id="filter-physics" name="subject" value="physics" checked>
-                        <label for="filter-physics">Physics</label>
+                        <input type="checkbox" class="tag-filter" id="filter-work" name="subject" value="work" checked>
+                        <label for="filter-work">Work</label>
                     </div>
                     <div class="filter-item">
-                        <input type="checkbox" id="filter-chemistry" name="subject" value="chemistry">
-                        <label for="filter-chemistry">Chemistry</label>
+                        <input type="checkbox" class="tag-filter" id="filter-study" name="subject" value="study" checked>
+                        <label for="filter-study">Study</label>
                     </div>
                     <div class="filter-item">
-                        <input type="checkbox" id="filter-biology" name="subject" value="biology">
-                        <label for="filter-biology">Biology</label>
+                        <input type="checkbox" class="tag-filter" id="filter-social" name="subject" value="social" checked>
+                        <label for="filter-social">Social</label>
                     </div>
                     <div class="filter-item">
-                        <input type="checkbox" id="filter-math" name="subject" value="math">
-                        <label for="filter-math">Mathematics (Calc)</label>
+                        <input type="checkbox" class="tag-filter" id="filter-other" name="subject" value="other" checked>
+                        <label for="filter-other">Other</label>
                     </div>
                 </div>
                 
@@ -110,7 +72,7 @@
 
 
             {% for post in posts %}
-            <article class="post-card" onclick="window.location.href='/post/{{ post._id }}'">
+            <article class="post-card" data-tag="{{ post.tag | lower}}" onclick="window.location.href='/post/{{ post._id }}'">
                 <div class="post-header">
                     <h4>
                         <span class="{{ post.tag }} tag">
@@ -140,5 +102,31 @@
     <footer>
         <p>&copy; 2025 Connect U. Built for students.</p>
     </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const filters = document.querySelectorAll('.tag-filter');
+            const posts = document.querySelectorAll('.post-card');
+
+            function updateFilters() {
+                
+                const activeTags = Array.from(filters).filter(i => i.checked).map(i => i.value);
+                posts.forEach(post => {
+                    const postTag = post.getAttribute('data-tag');
+
+                    if (activeTags.includes(postTag)) {
+                        post.style.display = "block";
+                    } else {
+                        post.style.display = "none";
+                    }
+                });
+            }
+
+            filters.forEach(filter => {
+                filter.addEventListener('change', updateFilters);
+            });
+        });
+    </script>
 </body>
 </html>
