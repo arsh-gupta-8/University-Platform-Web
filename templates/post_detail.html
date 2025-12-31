@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{{ post.title }} - Connect U</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <a href="{{ url_for('home') }}"><div class="logo">Connect U</div></a>
+        <nav>
+            {% if session.get('usergivenname') %}
+            <a href="{{ url_for('logout') }}">Hey, {{ session['usergivenname'] }}</a>
+            {% else %}
+            <a href="{{ url_for('login') }}">Login/Sign Up</a>
+            {% endif %}
+            <a href="#groups">Groups</a>
+            <a href="#notifications">Notifications</a>
+        </nav>
+    </header>
+</body>
+</html>

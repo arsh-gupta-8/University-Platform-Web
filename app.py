@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 import uuid
+from bson.objectid import ObjectId
 
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 load_dotenv()
@@ -170,6 +171,24 @@ def logout():
     session.pop('usergivenname', None)
     session.pop('userprofile', None)
     return redirect('/')
+
+
+
+# LOAD POST
+
+@app.route('/post/<post_id>')
+def view_post(post_id):
+    try:
+        query = {"_id": ObjectId(post_id)}
+    except:
+        return "Invalid Post ID", 400
+
+    post = post_storage.find_one(query)
+
+    if post:
+        return render_template('post_detail.html', post=post)
+    else:
+        return "Post not found", 404
 
 
 
